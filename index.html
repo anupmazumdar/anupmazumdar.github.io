@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anup Mazumdar | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* =====================================================
+   VARIABLES & RESET
+===================================================== */
+:root {
+  --space:    #050816;
+  --deep:     #0a0a1a;
+  --card-bg:  #0d0d1f;
+  --card2:    #111127;
+  --violet:   #915EFF;
+  --violet2:  #b48eff;
+  --pink:     #FF4D8D;
+  --cyan:     #00CFFF;
+  --green:    #00FFA3;
+  --white:    #F3F3F3;
+  --gray:     #aaa6c3;
+  --border:   rgba(145,94,255,.2);
+  --border2:  rgba(145,94,255,.5);
+  --glow-v:   rgba(145,94,255,.35);
+  --glow-c:   rgba(0,207,255,.25);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  background:var(--space);
+  color:var(--white);
+  font-family:'Poppins',sans-serif;
+  overflow-x:hidden;
+  cursor:none;
+}
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--deep)}
+::-webkit-scrollbar-thumb{background:var(--violet);border-radius:2px}
+::selection{background:var(--violet);color:#fff}
+
+/* =====================================================
+   CUSTOM CURSOR
+===================================================== */
+#cur{
+  position:fixed;width:14px;height:14px;
+  border-radius:50%;background:var(--violet);
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  mix-blend-mode:difference;
+  transition:width .2s,height .2s;
+}
+#cur2{
+  position:fixed;width:40px;height:40px;
+  border-radius:50%;border:1.5px solid var(--violet2);
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  opacity:.5;transition:width .3s,height .3s;
+}
+body.hov #cur{width:20px;height:20px}
+body.hov #cur2{width:60px;height:60px;border-color:var(--cyan);opacity:.8}
+
+/* =====================================================
+   NAV
+===================================================== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:1.2rem 3.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  background:transparent;
+  transition:background .4s,border-color .4s,backdrop-filter .4s;
+  border-bottom:1px solid transparent;
+}
+nav.stuck{
+  background:rgba(5,8,22,.85);
+  border-color:var(--border);
+  backdrop-filter:blur(16px);
+}
+.nav-brand{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:1.5rem;font-weight:700;
+  background:linear-gradient(90deg,var(--violet),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{
+  font-size:.85rem;font-weight:500;color:var(--gray);
+  transition:color .3s;cursor:none;position:relative;
+  padding-bottom:3px;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:0;left:0;
+  width:0;height:1.5px;background:var(--violet);transition:width .3s;
+}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{width:100%}
+
+/* =====================================================
+   STARS CANVAS
+===================================================== */
+#stars-canvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+#hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:0 3.5rem;
+  gap:4rem;
+  overflow:hidden;
+}
+.hero-left{flex:1;max-width:680px;padding-top:4rem}
+.hero-line1{
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:1.5rem;
+}
+.hero-dot-col{
+  display:flex;flex-direction:column;align-items:center;gap:0;
+}
+.hero-dot{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--violet);
+  box-shadow:0 0 20px var(--violet);
+}
+.hero-dot-line{
+  width:3px;height:80px;
+  background:linear-gradient(to bottom,var(--violet),transparent);
+}
+.hero-hi{
+  font-size:1.1rem;font-weight:500;color:var(--white);
+  font-family:'Fira Code',monospace;letter-spacing:.05em;
+}
+.hero-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(3rem,7vw,5.5rem);
+  font-weight:900;line-height:1.05;
+  letter-spacing:-.02em;
+  margin-bottom:.5rem;
+}
+.hero-name .white{color:var(--white)}
+.hero-name .violet{
+  background:linear-gradient(135deg,var(--violet),var(--pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-typed{
+  font-size:clamp(1rem,2.5vw,1.6rem);
+  font-weight:600;color:var(--gray);
+  min-height:2rem;margin-bottom:1.5rem;
+  font-family:'Space Grotesk',sans-serif;
+}
+.hero-typed .typed-cursor{
+  color:var(--violet);animation:blink .7s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hero-desc{
+  font-size:.95rem;line-height:1.8;color:var(--gray);
+  max-width:560px;margin-bottom:2.5rem;
+}
+.hero-desc strong{color:var(--violet2)}
+.hero-btns{display:flex;gap:1.2rem;flex-wrap:wrap}
+.btn-violet{
+  padding:.85rem 2rem;border:none;cursor:none;
+  background:linear-gradient(135deg,var(--violet),#6533d6);
+  color:#fff;font-family:'Poppins',sans-serif;
+  font-size:.85rem;font-weight:600;letter-spacing:.05em;
+  border-radius:50px;
+  box-shadow:0 0 25px rgba(145,94,255,.4);
+  transition:box-shadow .3s,transform .2s;
+  display:inline-flex;align-items:center;gap:.6rem;
+}
+.btn-violet:hover{box-shadow:0 0 45px rgba(145,94,255,.7);transform:translateY(-3px)}
+.btn-outline-v{
+  padding:.83rem 2rem;
+  border:1.5px solid var(--violet);color:var(--white);
+  background:transparent;cursor:none;
+  font-family:'Poppins',sans-serif;
+  font-size:.85rem;font-weight:600;letter-spacing:.05em;
+  border-radius:50px;
+  transition:background .3s,box-shadow .3s,transform .2s;
+  display:inline-flex;align-items:center;gap:.6rem;
+}
+.btn-outline-v:hover{background:rgba(145,94,255,.15);box-shadow:0 0 25px rgba(145,94,255,.3);transform:translateY(-3px)}
+
+/* Hero 3D canvas */
+.hero-right{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+#hero-canvas{width:min(50vw,540px);height:min(50vw,540px)}
+
+/* Scroll indicator */
+.scroll-ind{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:var(--gray);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  font-family:'Fira Code',monospace;
+}
+.scroll-mouse{
+  width:22px;height:36px;border:2px solid var(--gray);border-radius:12px;
+  display:flex;justify-content:center;padding-top:6px;
+}
+.scroll-mouse-dot{
+  width:4px;height:8px;background:var(--violet);border-radius:2px;
+  animation:scrollDown 1.6s ease-in-out infinite;
+}
+@keyframes scrollDown{0%{transform:translateY(0);opacity:1}80%{transform:translateY(12px);opacity:0}100%{transform:translateY(0);opacity:0}}
+
+/* =====================================================
+   SECTION UTILITY
+===================================================== */
+section{position:relative;z-index:1;padding:6rem 3.5rem}
+.sec-badge{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:'Fira Code',monospace;
+  font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--violet);margin-bottom:.6rem;
+}
+.sec-badge::before{content:'';width:28px;height:1.5px;background:var(--violet)}
+.sec-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(2rem,4.5vw,3.2rem);
+  font-weight:800;color:var(--white);
+  letter-spacing:-.02em;margin-bottom:.6rem;
+}
+.sec-sub{font-size:.9rem;color:var(--gray);max-width:640px;line-height:1.7;margin-bottom:3.5rem}
+
+/* =====================================================
+   ABOUT
+===================================================== */
+#about{background:linear-gradient(135deg,rgba(145,94,255,.03),transparent)}
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+}
+.about-img-wrap{
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+#about-canvas{width:100%;max-width:420px;height:420px}
+.about-text .ap{
+  font-size:.93rem;line-height:1.9;color:var(--gray);margin-bottom:1rem;
+}
+.about-text .ap strong{color:var(--violet2)}
+.about-stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1.2rem;margin-top:2rem;
+}
+.a-stat{
+  background:var(--card-bg);
+  border:1px solid var(--border);border-radius:12px;
+  padding:1.4rem 1.2rem;text-align:center;
+  transition:border-color .3s,transform .3s,box-shadow .3s;
+}
+.a-stat:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 10px 40px rgba(145,94,255,.15)}
+.a-stat-n{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:2.2rem;font-weight:800;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.a-stat-l{font-size:.72rem;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
+
+/* =====================================================
+   SKILLS — 3D TECH BALLS
+===================================================== */
+#skills{background:var(--deep)}
+.skills-canvas-wrap{
+  position:relative;height:360px;margin:0 -3.5rem;
+  overflow:hidden;
+}
+#skills-canvas{width:100%;height:100%}
+.skills-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:1.2rem;margin-top:3rem;
+}
+.sk{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:12px;padding:1.4rem 1rem;
+  text-align:center;
+  transition:border-color .3s,transform .3s,box-shadow .3s;
+  cursor:none;
+}
+.sk:hover{border-color:var(--border2);transform:translateY(-6px) scale(1.03);box-shadow:0 10px 40px rgba(145,94,255,.2)}
+.sk-icon{font-size:2.2rem;margin-bottom:.6rem;display:block}
+.sk-name{font-size:.78rem;font-weight:600;color:var(--gray);letter-spacing:.05em}
+.sk-cat{
+  font-family:'Fira Code',monospace;font-size:.6rem;
+  color:var(--violet);letter-spacing:.1em;text-transform:uppercase;
+  margin-top:.2rem;
+}
+
+/* =====================================================
+   EXPERIENCE
+===================================================== */
+#experience{}
+.exp-timeline{
+  display:flex;flex-direction:column;gap:2rem;
+  max-width:1000px;margin:0 auto;
+}
+.exp-card{
+  background:var(--card-bg);
+  border:1px solid var(--border);border-radius:20px;
+  padding:2.5rem;position:relative;overflow:hidden;
+  transition:border-color .4s,box-shadow .4s,transform .3s;
+}
+.exp-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 20px 60px rgba(145,94,255,.15)}
+.exp-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2.5px;
+  background:linear-gradient(90deg,var(--violet),var(--cyan),var(--pink));
+  border-radius:20px 20px 0 0;
+}
+.exp-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1.8rem}
+.exp-role{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--white)}
+.exp-co{
+  font-size:.8rem;color:var(--violet2);font-weight:600;
+  font-family:'Fira Code',monospace;letter-spacing:.05em;margin-top:.25rem;
+}
+.exp-date{
+  background:rgba(145,94,255,.12);border:1px solid var(--border);
+  border-radius:50px;padding:.4rem 1.2rem;
+  font-family:'Fira Code',monospace;font-size:.7rem;color:var(--violet2);
+}
+.exp-ul{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.exp-ul li{display:flex;gap:1rem;align-items:flex-start;font-size:.88rem;color:var(--gray);line-height:1.7}
+.exp-ul li::before{content:'▸';color:var(--violet);flex-shrink:0;margin-top:.1rem}
+.exp-ul li strong{color:var(--violet2)}
+
+/* =====================================================
+   PROJECTS
+===================================================== */
+#projects{background:var(--deep)}
+.proj-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:1.8rem;
+}
+.proj-card{
+  background:var(--card-bg);
+  border:1px solid var(--border);border-radius:20px;
+  padding:2rem;position:relative;overflow:hidden;
+  transition:border-color .4s,transform .2s ease-out,box-shadow .4s;
+  cursor:none;
+}
+.proj-card:hover{border-color:var(--border2);box-shadow:0 20px 60px rgba(145,94,255,.18)}
+.proj-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at var(--px,50%) var(--py,50%),rgba(145,94,255,.07),transparent 55%);
+  opacity:0;transition:opacity .4s;pointer-events:none;
+}
+.proj-card:hover::after{opacity:1}
+/* rainbow top bar */
+.proj-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2.5px;
+  background:linear-gradient(90deg,var(--violet) 0%,var(--cyan) 50%,var(--pink) 100%);
+  border-radius:20px 20px 0 0;
+  transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+.proj-card:hover::before{transform:scaleX(1)}
+.proj-num{
+  font-family:'Space Grotesk',sans-serif;font-size:3.5rem;
+  font-weight:900;color:var(--violet);opacity:.1;
+  line-height:1;margin-bottom:-.8rem;
+}
+.proj-name{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;color:var(--white);margin-bottom:.3rem}
+.proj-tag{font-size:.82rem;color:var(--violet2);font-style:italic;margin-bottom:1rem}
+.proj-desc{font-size:.84rem;color:var(--gray);line-height:1.75;margin-bottom:1.4rem}
+.proj-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem}
+.chip{
+  font-family:'Fira Code',monospace;font-size:.6rem;
+  padding:.25rem .7rem;border-radius:50px;
+  background:rgba(145,94,255,.12);border:1px solid rgba(145,94,255,.25);
+  color:var(--cyan);
+}
+.proj-links{display:flex;gap:1.2rem}
+.proj-link{
+  font-family:'Fira Code',monospace;font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--violet);
+  display:inline-flex;align-items:center;gap:.4rem;
+  transition:color .3s;
+}
+.proj-link:hover{color:var(--cyan)}
+.proj-card.big{grid-column:span 2}
+.proj-card.big .proj-inner{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+@media(max-width:900px){.proj-card.big{grid-column:span 1}.proj-card.big .proj-inner{grid-template-columns:1fr}}
+
+/* =====================================================
+   EDUCATION
+===================================================== */
+#education{}
+.edu-list{display:flex;flex-direction:column;gap:1.5rem;max-width:900px;margin:0 auto}
+.edu-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:16px;padding:2rem 2.5rem;
+  display:flex;gap:2rem;align-items:flex-start;
+  transition:border-color .3s,transform .3s,box-shadow .3s;
+}
+.edu-card:hover{border-color:var(--border2);transform:translateX(8px);box-shadow:0 10px 40px rgba(145,94,255,.12)}
+.edu-icon{
+  width:56px;height:56px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--violet),#6533d6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;box-shadow:0 0 20px rgba(145,94,255,.4);
+}
+.edu-deg{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:.25rem}
+.edu-inst{font-size:.78rem;color:var(--violet2);font-weight:600;letter-spacing:.05em;margin-bottom:.5rem}
+.edu-detail{font-size:.84rem;color:var(--gray);line-height:1.65}
+.edu-yr{
+  margin-left:auto;flex-shrink:0;
+  font-family:'Fira Code',monospace;font-size:.7rem;
+  color:var(--gray);background:rgba(145,94,255,.1);
+  border:1px solid var(--border);border-radius:50px;
+  padding:.3rem .9rem;white-space:nowrap;height:fit-content;
+}
+
+/* =====================================================
+   CERTIFICATIONS
+===================================================== */
+#certifications{background:var(--deep)}
+.cert-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:1.2rem;
+}
+.cert-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:14px;padding:1.6rem;
+  display:flex;align-items:flex-start;gap:1.2rem;
+  transition:border-color .3s,transform .3s,box-shadow .3s;cursor:none;
+}
+.cert-card:hover{border-color:var(--border2);transform:translateY(-5px);box-shadow:0 15px 40px rgba(145,94,255,.15)}
+.cert-ico{font-size:1.8rem;flex-shrink:0;line-height:1}
+.cert-n{font-size:.85rem;font-weight:600;color:var(--white);margin-bottom:.2rem}
+.cert-iss{font-family:'Fira Code',monospace;font-size:.65rem;color:var(--gray)}
+
+/* =====================================================
+   ACHIEVEMENTS
+===================================================== */
+#achievements{}
+.ach-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:1.4rem;
+}
+.ach-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:16px;padding:2rem;
+  transition:border-color .3s,transform .3s,box-shadow .3s;cursor:none;
+  position:relative;overflow:hidden;
+}
+.ach-card::before{
+  content:'';position:absolute;bottom:0;right:0;
+  width:100px;height:100px;border-radius:50%;
+  background:radial-gradient(circle,rgba(145,94,255,.08),transparent 70%);
+}
+.ach-card:hover{border-color:var(--border2);transform:translateY(-5px);box-shadow:0 15px 40px rgba(145,94,255,.15)}
+.ach-ico{font-size:2rem;margin-bottom:.8rem;display:block}
+.ach-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:var(--white);margin-bottom:.4rem}
+.ach-sub{font-size:.82rem;color:var(--gray);line-height:1.7}
+
+/* =====================================================
+   CONTACT — 3D Globe
+===================================================== */
+#contact{
+  background:linear-gradient(135deg,rgba(145,94,255,.04),transparent,rgba(0,207,255,.04));
+}
+.contact-wrap{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+}
+.contact-left .contact-desc{
+  font-size:.93rem;color:var(--gray);line-height:1.85;margin-bottom:2rem;
+}
+.contact-email{
+  display:inline-flex;align-items:center;gap:.8rem;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:1.1rem;font-weight:700;
+  color:var(--violet2);margin-bottom:2.5rem;
+  border-bottom:1.5px solid rgba(145,94,255,.4);padding-bottom:4px;
+  transition:color .3s,border-color .3s;
+}
+.contact-email:hover{color:var(--cyan);border-color:var(--cyan)}
+.socials-row{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.soc{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--card-bg);border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .3s,transform .3s,box-shadow .3s;cursor:none;
+}
+.soc svg{width:17px;height:17px;fill:var(--gray);transition:fill .3s}
+.soc:hover{border-color:var(--violet);transform:translateY(-4px);box-shadow:0 8px 25px rgba(145,94,255,.35)}
+.soc:hover svg{fill:var(--violet2)}
+.soc-full{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:.6rem 1.4rem;border-radius:50px;
+  background:var(--card-bg);border:1.5px solid var(--border);
+  font-family:'Fira Code',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gray);
+  transition:border-color .3s,color .3s,transform .3s,box-shadow .3s;cursor:none;
+}
+.soc-full svg{width:13px;height:13px;fill:currentColor;flex-shrink:0}
+.soc-full:hover{border-color:var(--violet);color:var(--violet2);transform:translateY(-3px);box-shadow:0 8px 25px rgba(145,94,255,.2)}
+.contact-right{display:flex;align-items:center;justify-content:center}
+#globe-canvas{width:min(45vw,420px);height:min(45vw,420px)}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+footer{
+  position:relative;z-index:1;
+  padding:1.8rem 3.5rem;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:1rem;
+  background:var(--deep);
+}
+.ft{font-family:'Fira Code',monospace;font-size:.65rem;letter-spacing:.15em;color:var(--gray);text-transform:uppercase}
+.ft-heart{color:var(--pink)}
+
+/* =====================================================
+   SCROLL REVEAL
+===================================================== */
+.rv{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.rv.vis{opacity:1;transform:none}
+.rv-l{opacity:0;transform:translateX(-50px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
+.rv-l.vis{opacity:1;transform:none}
+.rv-r{opacity:0;transform:translateX(50px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
+.rv-r.vis{opacity:1;transform:none}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+@media(max-width:1024px){
+  .about-grid,.contact-wrap{grid-template-columns:1fr;gap:3rem}
+  #about-canvas,#globe-canvas{max-width:340px;height:340px}
+  .hero-right{display:none}
+  section{padding:5rem 2rem}
+  nav{padding:1rem 2rem}
+}
+@media(max-width:600px){
+  .hero-name{font-size:clamp(2.8rem,11vw,4rem)}
+  .proj-grid{grid-template-columns:1fr}
+  .about-stats{grid-template-columns:1fr 1fr}
+  nav .nav-links{display:none}
+  footer{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+<canvas id="stars-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-brand">Anup.</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ================================================
+     HERO
+================================================ -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-line1">
+      <div class="hero-dot-col">
+        <div class="hero-dot"></div>
+        <div class="hero-dot-line"></div>
+      </div>
+      <span class="hero-hi">Hi, I'm</span>
+    </div>
+    <h1 class="hero-name">
+      <span class="white">Anup </span><span class="violet">Mazumdar.</span>
+    </h1>
+    <div class="hero-typed" id="typed-el"><span id="typed-text"></span><span class="typed-cursor">|</span></div>
+    <p class="hero-desc">
+      Full-Stack Developer &amp; ML Engineer building <strong>production-grade</strong> systems.
+      Currently architecting <strong>GraminBharat</strong> — a super-app for 650,000+ rural villages across India.
+      MCA @ UEM Jaipur.
+    </p>
+    <div class="hero-btns">
+      <a href="Anup_Mazumdar_Resume.docx" download class="btn-violet">↓ Resume</a>
+      <a href="#projects" class="btn-outline-v">View Projects →</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <canvas id="hero-canvas"></canvas>
+  </div>
+
+  <div class="scroll-ind">
+    <div class="scroll-mouse"><div class="scroll-mouse-dot"></div></div>
+    scroll
+  </div>
+</section>
+
+<!-- ================================================
+     ABOUT
+================================================ -->
+<section id="about">
+  <div class="sec-badge rv">01 — Introduction</div>
+  <h2 class="sec-title rv">Overview</h2>
+  <div class="about-grid">
+    <div class="about-img-wrap rv-l">
+      <canvas id="about-canvas"></canvas>
+    </div>
+    <div class="about-text rv-r">
+      <p class="ap">I'm a <strong>Full-Stack Developer and ML Engineer</strong> pursuing MCA at University of Engineering &amp; Management, Jaipur. I build end-to-end digital products that scale — from microservice architectures to intelligent ML pipelines.</p>
+      <p class="ap">My internship at <strong>Briztech Infosystems</strong> sharpened my skills across ML deployment, REST API design, and OWASP security practices. I thrive where clean UX meets resilient backend engineering.</p>
+      <p class="ap">Beyond code — NSS National Debate Winner (18 states), ACM Chapter Member, HackUEM 5.0 organizer. I believe the best engineers communicate as well as they build.</p>
+      <div class="about-stats">
+        <div class="a-stat rv" style="transition-delay:.05s">
+          <div class="a-stat-n" data-target="4">0</div>
+          <div class="a-stat-l">Major Projects</div>
+        </div>
+        <div class="a-stat rv" style="transition-delay:.1s">
+          <div class="a-stat-n" data-target="829" data-gpa="1">0</div>
+          <div class="a-stat-l">BCA CGPA / 10</div>
+        </div>
+        <div class="a-stat rv" style="transition-delay:.15s">
+          <div class="a-stat-n" data-target="18">0</div>
+          <div class="a-stat-l">States Represented</div>
+        </div>
+        <div class="a-stat rv" style="transition-delay:.2s">
+          <div class="a-stat-n" data-target="5">0</div>
+          <div class="a-stat-l">Certifications</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     SKILLS
+================================================ -->
+<section id="skills">
+  <div class="sec-badge rv">02 — What I know</div>
+  <h2 class="sec-title rv">Tech Stack</h2>
+  <p class="sec-sub rv">Technologies I work with day-to-day — from crafting pixel-perfect UIs to deploying scalable ML systems.</p>
+  <div class="skills-canvas-wrap rv">
+    <canvas id="skills-canvas"></canvas>
+  </div>
+  <div class="skills-grid">
+    <div class="sk rv"><span class="sk-icon">🐍</span><div class="sk-name">Python</div><div class="sk-cat">Language</div></div>
+    <div class="sk rv" style="transition-delay:.04s"><span class="sk-icon">📜</span><div class="sk-name">TypeScript</div><div class="sk-cat">Language</div></div>
+    <div class="sk rv" style="transition-delay:.08s"><span class="sk-icon">⚛️</span><div class="sk-name">React.js</div><div class="sk-cat">Frontend</div></div>
+    <div class="sk rv" style="transition-delay:.12s"><span class="sk-icon">▲</span><div class="sk-name">Next.js 14</div><div class="sk-cat">Frontend</div></div>
+    <div class="sk rv" style="transition-delay:.16s"><span class="sk-icon">🟢</span><div class="sk-name">Node.js</div><div class="sk-cat">Backend</div></div>
+    <div class="sk rv" style="transition-delay:.2s"><span class="sk-icon">🚀</span><div class="sk-name">FastAPI</div><div class="sk-cat">Backend</div></div>
+    <div class="sk rv" style="transition-delay:.24s"><span class="sk-icon">🐘</span><div class="sk-name">PostgreSQL</div><div class="sk-cat">Database</div></div>
+    <div class="sk rv" style="transition-delay:.28s"><span class="sk-icon">🍃</span><div class="sk-name">MongoDB</div><div class="sk-cat">Database</div></div>
+    <div class="sk rv" style="transition-delay:.32s"><span class="sk-icon">🐳</span><div class="sk-name">Docker</div><div class="sk-cat">DevOps</div></div>
+    <div class="sk rv" style="transition-delay:.36s"><span class="sk-icon">☸️</span><div class="sk-name">Kubernetes</div><div class="sk-cat">DevOps</div></div>
+    <div class="sk rv" style="transition-delay:.4s"><span class="sk-icon">🤖</span><div class="sk-name">Scikit-learn</div><div class="sk-cat">ML</div></div>
+    <div class="sk rv" style="transition-delay:.44s"><span class="sk-icon">🧠</span><div class="sk-name">Gemini Pro</div><div class="sk-cat">AI / LLM</div></div>
+    <div class="sk rv" style="transition-delay:.48s"><span class="sk-icon">🔴</span><div class="sk-name">Redis</div><div class="sk-cat">Database</div></div>
+    <div class="sk rv" style="transition-delay:.52s"><span class="sk-icon">🌊</span><div class="sk-name">Tailwind CSS</div><div class="sk-cat">Frontend</div></div>
+    <div class="sk rv" style="transition-delay:.56s"><span class="sk-icon">☁️</span><div class="sk-name">GCP / Vercel</div><div class="sk-cat">Cloud</div></div>
+    <div class="sk rv" style="transition-delay:.6s"><span class="sk-icon">🔒</span><div class="sk-name">OWASP</div><div class="sk-cat">Security</div></div>
+  </div>
+</section>
+
+<!-- ================================================
+     EXPERIENCE
+================================================ -->
+<section id="experience">
+  <div class="sec-badge rv">03 — Work History</div>
+  <h2 class="sec-title rv">Experience</h2>
+  <div class="exp-timeline">
+    <div class="exp-card rv">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">ML &amp; Web Development Intern</div>
+          <div class="exp-co">Briztech Infosystems</div>
+        </div>
+        <div class="exp-date">Apr 2025 — Jun 2025</div>
+      </div>
+      <ul class="exp-ul">
+        <li>Built and deployed <strong>2 ML classification models</strong> with Scikit-learn achieving <strong>15% accuracy improvement</strong> over baseline via feature engineering and hyperparameter tuning.</li>
+        <li>Developed full-stack responsive web features; optimized SQL queries reducing <strong>page load by 30%</strong>.</li>
+        <li>Performed comprehensive EDA with Pandas &amp; NumPy — missing values, outlier detection, categorical encoding.</li>
+        <li>Wrapped ML model in a <strong>FastAPI REST endpoint</strong>; documented precision, recall &amp; F1-score for stakeholders.</li>
+        <li>Conducted <strong>OWASP Top-10 vulnerability assessments</strong>; documented XSS and SQL injection findings.</li>
+        <li>Collaborated in an Agile team of 5 via Git, GitHub PRs, daily standups, and sprint planning.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     PROJECTS
+================================================ -->
+<section id="projects">
+  <div class="sec-badge rv">04 — What I've Built</div>
+  <h2 class="sec-title rv">Projects</h2>
+  <div class="proj-grid">
+
+    <div class="proj-card big rv">
+      <div class="proj-inner">
+        <div>
+          <div class="proj-num">01</div>
+          <div class="proj-name">GraminBharat</div>
+          <div class="proj-tag">Rural Super-App for Bharat</div>
+          <div class="proj-chips">
+            <span class="chip">Next.js 14</span><span class="chip">TypeScript</span>
+            <span class="chip">React Native</span><span class="chip">Node.js</span>
+            <span class="chip">PostgreSQL</span><span class="chip">MongoDB</span>
+            <span class="chip">Redis</span><span class="chip">Docker</span>
+            <span class="chip">Kubernetes</span><span class="chip">Razorpay</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://gramin-bharat-web.vercel.app" target="_blank" class="proj-link">🌐 Live Demo</a>
+            <a href="https://github.com/anupmazumdar" target="_blank" class="proj-link">📂 GitHub</a>
+          </div>
+        </div>
+        <div>
+          <div class="proj-desc">
+            Full-stack super-app with <strong style="color:var(--violet2)">8 service verticals</strong> — e-commerce, telemedicine, agritech, education, travel, food delivery, cab booking, real estate — targeting <strong style="color:var(--violet2)">650,000+ underserved villages</strong>.<br><br>
+            Monorepo: API Gateway + Auth + 11 microservices. Docker + Kubernetes orchestration. <strong style="color:var(--violet2)">12-language localization</strong> with voice input. Integrated NABARD, PMJAY, IFFCO, SBI govt APIs.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card rv">
+      <div class="proj-num">02</div>
+      <div class="proj-name">TalentAI</div>
+      <div class="proj-tag">AI-Powered Recruitment Agent</div>
+      <div class="proj-desc">AI recruitment platform reducing manual screening by <strong style="color:var(--violet2)">60%</strong>. 7-stage assessment pipeline with Gemini Pro. Sub-500ms AI response rendering. JWT + Bcrypt security.</div>
+      <div class="proj-chips">
+        <span class="chip">React.js</span><span class="chip">Tailwind</span>
+        <span class="chip">Node.js</span><span class="chip">Gemini Pro</span>
+        <span class="chip">GCP</span><span class="chip">JWT</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/anupmazumdar" target="_blank" class="proj-link">📂 GitHub</a>
+      </div>
+    </div>
+
+    <div class="proj-card rv" style="transition-delay:.08s">
+      <div class="proj-num">03</div>
+      <div class="proj-name">Online Digital Corp</div>
+      <div class="proj-tag">Multi-Service E-Commerce Platform</div>
+      <div class="proj-desc">Multi-service platform with 12 categories, full cart &amp; order management. AI Concierge via OpenRouter (GPT-4o, Claude, Gemini) through secure server-side proxy.</div>
+      <div class="proj-chips">
+        <span class="chip">Node.js</span><span class="chip">Express.js</span>
+        <span class="chip">OpenRouter</span><span class="chip">Vercel</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://super-app-one-opal.vercel.app" target="_blank" class="proj-link">🌐 Live Demo</a>
+        <a href="https://github.com/anupmazumdar" target="_blank" class="proj-link">📂 GitHub</a>
+      </div>
+    </div>
+
+    <div class="proj-card rv" style="transition-delay:.12s">
+      <div class="proj-num">04</div>
+      <div class="proj-name">iSkool LMS</div>
+      <div class="proj-tag">Learning Management System</div>
+      <div class="proj-desc">Full LMS with registration, course purchase, content delivery and progress tracking. PHP MVC. 8+ table normalized schema. Query indexing cut response time by <strong style="color:var(--violet2)">40%</strong>.</div>
+      <div class="proj-chips">
+        <span class="chip">PHP</span><span class="chip">MySQL</span>
+        <span class="chip">Bootstrap</span><span class="chip">JavaScript</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/anupmazumdar" target="_blank" class="proj-link">📂 GitHub</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================================================
+     EDUCATION
+================================================ -->
+<section id="education">
+  <div class="sec-badge rv">05 — Education</div>
+  <h2 class="sec-title rv">Academic Background</h2>
+  <div class="edu-list" style="margin-top:2rem">
+    <div class="edu-card rv">
+      <div class="edu-icon">🎓</div>
+      <div>
+        <div class="edu-deg">Master of Computer Applications (MCA)</div>
+        <div class="edu-inst">University of Engineering &amp; Management, Jaipur · Computational Science</div>
+        <div class="edu-detail">Advanced studies in distributed systems, AI/ML algorithms, and large-scale software architecture.</div>
+      </div>
+      <div class="edu-yr">Oct 2025 — Present</div>
+    </div>
+    <div class="edu-card rv" style="transition-delay:.1s">
+      <div class="edu-icon">🏫</div>
+      <div>
+        <div class="edu-deg">Bachelor of Computer Applications (BCA)</div>
+        <div class="edu-inst">K. B. College, Bermo, Bokaro, Jharkhand</div>
+        <div class="edu-detail"><strong style="color:var(--violet2)">CGPA 8.29/10 — Top-3 across all 6 semesters.</strong> Coursework: Data Structures, DBMS, Web Technologies, Statistics, Networks, Software Engineering.</div>
+      </div>
+      <div class="edu-yr">Sep 2022 — Sep 2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     CERTIFICATIONS
+================================================ -->
+<section id="certifications">
+  <div class="sec-badge rv">06 — Credentials</div>
+  <h2 class="sec-title rv">Certifications</h2>
+  <div class="cert-grid" style="margin-top:2rem">
+    <div class="cert-card rv"><div class="cert-ico">🛡️</div><div><div class="cert-n">Google Cybersecurity Foundation</div><div class="cert-iss">Google · 2024</div></div></div>
+    <div class="cert-card rv" style="transition-delay:.05s"><div class="cert-ico">📊</div><div><div class="cert-n">Introduction to Data Analytics</div><div class="cert-iss">IBM / Coursera · 2024</div></div></div>
+    <div class="cert-card rv" style="transition-delay:.1s"><div class="cert-ico">🐍</div><div><div class="cert-n">Python (Basic)</div><div class="cert-iss">HackerRank · 2024</div></div></div>
+    <div class="cert-card rv" style="transition-delay:.15s"><div class="cert-ico">∑</div><div><div class="cert-n">Discrete Mathematics for CS</div><div class="cert-iss">Univ. of Michigan / Coursera · 2024</div></div></div>
+    <div class="cert-card rv" style="transition-delay:.2s"><div class="cert-ico">💡</div><div><div class="cert-n">Basics of Entrepreneurship</div><div class="cert-iss">Coursera · 2024</div></div></div>
+  </div>
+</section>
+
+<!-- ================================================
+     ACHIEVEMENTS
+================================================ -->
+<section id="achievements">
+  <div class="sec-badge rv">07 — Highlights</div>
+  <h2 class="sec-title rv">Achievements</h2>
+  <div class="ach-grid" style="margin-top:2rem">
+    <div class="ach-card rv"><span class="ach-ico">🏆</span><div class="ach-title">NSS National Debate Winner</div><div class="ach-sub">Represented 18 states at NIC Camp, Haryana (2024). Won at the national level against regional delegations across India.</div></div>
+    <div class="ach-card rv" style="transition-delay:.06s"><span class="ach-ico">🎓</span><div class="ach-title">Top-3 BCA Graduate</div><div class="ach-sub">Maintained Top-3 rank across all 6 semesters with CGPA 8.29/10 at K.B. College, Bokaro.</div></div>
+    <div class="ach-card rv" style="transition-delay:.12s"><span class="ach-ico">🔗</span><div class="ach-title">ACM Member &amp; HackUEM 5.0 Organizer</div><div class="ach-sub">Active ACM Student Chapter member at UEM Jaipur; organized HackUEM 5.0 to enable student-led innovation.</div></div>
+    <div class="ach-card rv" style="transition-delay:.18s"><span class="ach-ico">🌐</span><div class="ach-title">Open Source Contributor</div><div class="ach-sub">Maintained public GitHub repos for GraminBharat &amp; TalentAI with contribution guidelines and MIT licensing.</div></div>
+    <div class="ach-card rv" style="transition-delay:.24s"><span class="ach-ico">🧑‍💻</span><div class="ach-title">GitHub Student Developer Pack</div><div class="ach-sub">Verified (March 2026–2028). Access to Copilot, JetBrains, Azure credits, DataCamp, and 15+ dev tools.</div></div>
+  </div>
+</section>
+
+<!-- ================================================
+     CONTACT
+================================================ -->
+<section id="contact">
+  <div class="sec-badge rv" style="justify-content:center">08 — Get In Touch</div>
+  <h2 class="sec-title rv" style="text-align:center">Contact</h2>
+  <div class="contact-wrap">
+    <div class="contact-left rv-l">
+      <p class="contact-desc">
+        I'm actively seeking internship opportunities in Full-Stack Web Development and Data Science / ML Engineering. Whether you have a project, a role, or just want to connect — my inbox is always open.
+      </p>
+      <a href="mailto:thezeroanup0@gmail.com" class="contact-email">📧 thezeroanup0@gmail.com</a>
+      <div class="socials-row">
+        <a href="https://github.com/anupmazumdar" target="_blank" class="soc" title="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/anup-mazumdar-1033b5321" target="_blank" class="soc" title="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/zeroanup/" target="_blank" class="soc" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        </a>
+        <a href="https://x.com/MrAnupMazumdar" target="_blank" class="soc" title="X / Twitter">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+      <div style="margin-bottom:1rem">
+        <a href="https://linktr.ee/anupmazumdar" target="_blank" class="soc-full">
+          <svg viewBox="0 0 24 24"><path d="M7.953 15.066c-.08.163-.08.324-.08.486.08.517.528.897 1.052.897H12v2.475H8.925c-1.684 0-3.208-1.036-3.855-2.638l-.16-.408c-.08-.162-.08-.324-.08-.486 0-.649.526-1.134 1.134-1.134H7.95v.808zm8.094 0v-.808h1.986c.608 0 1.134.485 1.134 1.134 0 .162 0 .324-.08.486l-.16.408c-.647 1.602-2.171 2.638-3.855 2.638H12v-2.475h3.075c.524 0 .972-.38 1.052-.897.08-.162 0-.324-.08-.486zm-4.047-3.56h8.094v2.316H12V11.506zm-8.094 0H12v2.316H3.906V11.506zm4.047-7.88l4.016 4.016V12H12V7.642L8.062 3.626 9.38 2.308zm7.014 5.944l-4.016-4.016 1.318-1.318 4.016 4.016-1.318 1.318z"/></svg>
+          Linktree
+        </a>
+      </div>
+      <a href="Anup_Mazumdar_Resume.docx" download class="btn-violet" style="margin-top:.5rem">↓ Download Resume</a>
+    </div>
+    <div class="contact-right rv-r">
+      <canvas id="globe-canvas"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">© 2026 Anup Mazumdar — All rights reserved</div>
+  <div class="ft">Made with <span class="ft-heart">♥</span> | thezeroanup0@gmail.com</div>
+</footer>
+
+<!-- ================================================
+     JAVASCRIPT
+================================================ -->
+<script>
+/* ============================================================
+   CURSOR
+============================================================ */
+const c1=document.getElementById('cur'),c2=document.getElementById('cur2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+document.querySelectorAll('a,button,.sk,.proj-card,.exp-card,.edu-card,.cert-card,.ach-card,.a-stat,.soc,.soc-full,.btn-violet,.btn-outline-v').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+(function animCursor(){
+  c1.style.left=mx+'px';c1.style.top=my+'px';
+  rx+=(mx-rx)*.13;ry+=(my-ry)*.13;
+  c2.style.left=rx+'px';c2.style.top=ry+'px';
+  requestAnimationFrame(animCursor);
+})();
+
+/* ============================================================
+   STARFIELD
+============================================================ */
+(function(){
+  const c=document.getElementById('stars-canvas');
+  const ctx=c.getContext('2d');
+  let W,H,stars=[];
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight}
+  resize();window.addEventListener('resize',()=>{resize();init()});
+  function init(){
+    stars=Array.from({length:250},()=>({
+      x:Math.random()*W,y:Math.random()*H,
+      r:Math.random()*1.6+.3,
+      o:Math.random()*.7+.1,
+      sp:Math.random()*.4+.1,
+      twinkle:Math.random()*Math.PI*2
+    }));
+  }
+  init();
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    t+=.015;
+    stars.forEach(s=>{
+      s.twinkle+=.02;
+      const alpha=s.o*(0.6+0.4*Math.sin(s.twinkle));
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,190,255,${alpha})`;ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ============================================================
+   TYPEWRITER
+============================================================ */
+const phrases=['Full-Stack Developer','ML Engineer','React & Node.js Builder','Open Source Contributor','Competitive Debater'];
+let pi=0,ci=0,deleting=false,pauseTick=0;
+const el=document.getElementById('typed-text');
+function typeWriter(){
+  const phrase=phrases[pi];
+  if(!deleting){
+    el.textContent=phrase.slice(0,ci+1);ci++;
+    if(ci===phrase.length){deleting=true;pauseTick=40}
+  }else{
+    if(pauseTick>0){pauseTick--;setTimeout(typeWriter,30);return}
+    el.textContent=phrase.slice(0,ci-1);ci--;
+    if(ci===0){deleting=false;pi=(pi+1)%phrases.length;pauseTick=20}
+  }
+  setTimeout(typeWriter,deleting?40:90);
+}
+typeWriter();
+
+/* ============================================================
+   THREE.JS — HERO FLOATING SPHERE + RINGS
+============================================================ */
+(function(){
+  if(!window.THREE)return;
+  const canvas=document.getElementById('hero-canvas');
+  const W=540,H=540;canvas.width=W;canvas.height=H;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setSize(W,H);renderer.setClearColor(0,0);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(45,1,.1,100);camera.position.z=5.5;
+
+  // Main sphere — icosahedron
+  const geo=new THREE.IcosahedronGeometry(1.55,2);
+  const mat=new THREE.MeshStandardMaterial({
+    color:0x915EFF,wireframe:false,
+    roughness:.4,metalness:.7,
+    emissive:0x4422aa,emissiveIntensity:.3
+  });
+  const sphere=new THREE.Mesh(geo,mat);scene.add(sphere);
+
+  // Wireframe overlay
+  const wgeo=new THREE.IcosahedronGeometry(1.58,2);
+  const wmat=new THREE.MeshBasicMaterial({color:0xb48eff,wireframe:true,transparent:true,opacity:.25});
+  scene.add(new THREE.Mesh(wgeo,wmat));
+
+  // Orbit rings
+  function ring(r,c,rx=0,ry=0,rz=0){
+    const g=new THREE.TorusGeometry(r,.008,2,120);
+    const m=new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.6});
+    const t=new THREE.Mesh(g,m);t.rotation.set(rx,ry,rz);scene.add(t);return t;
+  }
+  const r1=ring(2.1,0x915EFF,Math.PI/2,0,.3);
+  const r2=ring(2.3,0x00CFFF,.5,Math.PI/5,0);
+  const r3=ring(1.9,0xFF4D8D,0,0,Math.PI/4);
+
+  // Floating particles around sphere
+  const pG=new THREE.BufferGeometry();
+  const pPos=new Float32Array(600*3);
+  for(let i=0;i<600*3;i++)pPos[i]=(Math.random()-.5)*6;
+  pG.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+  const pM=new THREE.PointsMaterial({color:0x915EFF,size:.03,transparent:true,opacity:.5});
+  scene.add(new THREE.Points(pG,pM));
+
+  // Lights
+  scene.add(Object.assign(new THREE.AmbientLight(0xffffff,.4)));
+  const dl=new THREE.DirectionalLight(0x915EFF,1.5);dl.position.set(5,5,5);scene.add(dl);
+  const dl2=new THREE.DirectionalLight(0x00CFFF,1);dl2.position.set(-5,-3,3);scene.add(dl2);
+  const pl=new THREE.PointLight(0xFF4D8D,.8,10);pl.position.set(2,2,-2);scene.add(pl);
+
+  let hmx=0,hmy=0;
+  canvas.addEventListener('mousemove',e=>{
+    const r=canvas.getBoundingClientRect();
+    hmx=(e.clientX-r.left-W/2)/(W/2);
+    hmy=(e.clientY-r.top-H/2)/(H/2);
+  });
+
+  let t=0;
+  (function anim(){
+    requestAnimationFrame(anim);t+=.006;
+    sphere.rotation.y=t*.5+hmx*.3;sphere.rotation.x=t*.2+hmy*.2;
+    r1.rotation.z=t*.3;r1.rotation.y=t*.15;
+    r2.rotation.x=t*.25;r2.rotation.z=-t*.2;
+    r3.rotation.y=t*.4;r3.rotation.x=t*.18;
+    renderer.render(scene,camera);
+  })();
+})();
+
+/* ============================================================
+   THREE.JS — ABOUT SECTION — ORBITING CUBES
+============================================================ */
+(function(){
+  if(!window.THREE)return;
+  const canvas=document.getElementById('about-canvas');
+  const W=420,H=420;canvas.width=W;canvas.height=H;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setSize(W,H);renderer.setClearColor(0,0);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(45,1,.1,50);camera.position.z=6;
+
+  const colors=[0x915EFF,0x00CFFF,0xFF4D8D,0x00FFA3,0xFFD700];
+  const cubes=[];
+  for(let i=0;i<12;i++){
+    const s=.2+Math.random()*.25;
+    const g=new THREE.BoxGeometry(s,s,s);
+    const m=new THREE.MeshStandardMaterial({color:colors[i%colors.length],metalness:.8,roughness:.2,emissive:colors[i%colors.length],emissiveIntensity:.15});
+    const mesh=new THREE.Mesh(g,m);
+    const angle=(i/12)*Math.PI*2;
+    const radius=1.6+Math.random()*1.2;
+    mesh.position.set(Math.cos(angle)*radius,Math.sin(angle)*radius,(Math.random()-.5)*.8);
+    mesh._angle=angle;mesh._radius=radius;mesh._speed=.008+Math.random()*.006;
+    cubes.push(mesh);scene.add(mesh);
+  }
+  // Center element
+  const cg=new THREE.IcosahedronGeometry(.8,0);
+  const cm=new THREE.MeshStandardMaterial({color:0x915EFF,wireframe:false,metalness:.9,roughness:.1,emissive:0x4422aa,emissiveIntensity:.4});
+  const center=new THREE.Mesh(cg,cm);scene.add(center);
+
+  const al=new THREE.AmbientLight(0xffffff,.5);scene.add(al);
+  const dl=new THREE.DirectionalLight(0x915EFF,2);dl.position.set(4,4,4);scene.add(dl);
+  const dl2=new THREE.DirectionalLight(0x00CFFF,.8);dl2.position.set(-4,-4,2);scene.add(dl2);
+
+  let t=0;
+  (function anim(){requestAnimationFrame(anim);t+=.007;
+    cubes.forEach(c=>{
+      c._angle+=c._speed;
+      c.position.x=Math.cos(c._angle)*c._radius;
+      c.position.y=Math.sin(c._angle)*c._radius;
+      c.rotation.x+=.02;c.rotation.y+=.015;
+    });
+    center.rotation.y=t*.4;center.rotation.x=t*.25;
+    renderer.render(scene,camera);
+  })();
+})();
+
+/* ============================================================
+   THREE.JS — SKILLS CANVAS — FLOATING TECH BALLS
+============================================================ */
+(function(){
+  if(!window.THREE)return;
+  const canvas=document.getElementById('skills-canvas');
+  const W=canvas.offsetWidth||window.innerWidth,H=360;
+  canvas.width=W;canvas.height=H;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setSize(W,H);renderer.setClearColor(0,0);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(50,W/H,.1,100);camera.position.z=8;
+
+  const techColors=[0x915EFF,0x00CFFF,0xFF4D8D,0x00FFA3,0xFFD700,0xFF6B35,0x4ECDC4,0xFF8B94];
+  const balls=[];
+  const techNames=['Py','TS','React','Node','ML','SQL','Docker','Redis','GCP','OWASP','API','NLP'];
+
+  for(let i=0;i<18;i++){
+    const r=.28+Math.random()*.18;
+    const g=new THREE.SphereGeometry(r,16,16);
+    const col=techColors[i%techColors.length];
+    const m=new THREE.MeshStandardMaterial({
+      color:col,metalness:.7,roughness:.25,
+      emissive:col,emissiveIntensity:.2
+    });
+    const mesh=new THREE.Mesh(g,m);
+    mesh.position.set((Math.random()-.5)*(W/80),(Math.random()-.5)*3,(Math.random()-.5)*2);
+    mesh._vy=(Math.random()-.5)*.008;
+    mesh._vx=(Math.random()-.5)*.006;
+    mesh._vz=(Math.random()-.5)*.005;
+    balls.push(mesh);scene.add(mesh);
+  }
+
+  // Connecting lines particles
+  const pg=new THREE.BufferGeometry();
+  const pa=new Float32Array(500*3);
+  for(let i=0;i<500*3;i++)pa[i]=(Math.random()-.5)*(W/70);
+  pg.setAttribute('position',new THREE.BufferAttribute(pa,3));
+  const pm=new THREE.PointsMaterial({color:0x915EFF,size:.04,transparent:true,opacity:.35});
+  scene.add(new THREE.Points(pg,pm));
+
+  const al=new THREE.AmbientLight(0xffffff,.6);scene.add(al);
+  const dl=new THREE.DirectionalLight(0x915EFF,2);dl.position.set(5,5,5);scene.add(dl);
+  const dl2=new THREE.DirectionalLight(0x00CFFF,1.5);dl2.position.set(-5,-5,3);scene.add(dl2);
+
+  let t=0;
+  (function anim(){requestAnimationFrame(anim);t+=.006;
+    const hw=W/160,hh=1.6;
+    balls.forEach(b=>{
+      b.position.x+=b._vx;b.position.y+=b._vy;b.position.z+=b._vz;
+      if(Math.abs(b.position.x)>hw){b._vx*=-1}
+      if(Math.abs(b.position.y)>hh){b._vy*=-1}
+      if(Math.abs(b.position.z)>2){b._vz*=-1}
+      b.rotation.x+=.015;b.rotation.y+=.012;
+    });
+    renderer.render(scene,camera);
+  })();
+})();
+
+/* ============================================================
+   THREE.JS — GLOBE (CONTACT)
+============================================================ */
+(function(){
+  if(!window.THREE)return;
+  const canvas=document.getElementById('globe-canvas');
+  const S=420;canvas.width=S;canvas.height=S;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setSize(S,S);renderer.setClearColor(0,0);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(45,1,.1,100);camera.position.z=4;
+
+  // Globe sphere
+  const geo=new THREE.SphereGeometry(1.5,64,64);
+  // Draw lat/lon lines on canvas texture
+  const tc=document.createElement('canvas');tc.width=1024;tc.height=512;
+  const tctx=tc.getContext('2d');
+  tctx.fillStyle='#050816';tctx.fillRect(0,0,1024,512);
+  // Draw grid lines
+  tctx.strokeStyle='rgba(145,94,255,.5)';tctx.lineWidth=.8;
+  for(let lat=-80;lat<=80;lat+=20){
+    tctx.beginPath();
+    const y=(lat+90)/180*512;
+    tctx.moveTo(0,y);tctx.lineTo(1024,y);tctx.stroke();
+  }
+  for(let lon=0;lon<=360;lon+=20){
+    tctx.beginPath();
+    const x=lon/360*1024;
+    tctx.moveTo(x,0);tctx.lineTo(x,512);tctx.stroke();
+  }
+  // Continent dots
+  const continentDots=[
+    [40,0],[50,10],[55,20],[45,30],[35,5],[30,-10],[20,30],[10,15],
+    [0,5],[-10,-20],[-20,-40],[-30,-50],[-40,-60],[60,80],[65,100],
+    [55,90],[50,130],[40,120],[35,100],[45,80],[25,50],[30,80]
+  ];
+  tctx.fillStyle='rgba(145,94,255,.8)';
+  continentDots.forEach(([lat,lon])=>{
+    const x=(lon+180)/360*1024;const y=(90-lat)/180*512;
+    tctx.beginPath();tctx.arc(x,y,4,0,Math.PI*2);tctx.fill();
+  });
+  // Glow dots (cities)
+  const cities=Array.from({length:80},()=>({lat:(Math.random()*160-80),lon:(Math.random()*360-180)}));
+  tctx.fillStyle='rgba(0,207,255,.9)';
+  cities.forEach(({lat,lon})=>{
+    const x=(lon+180)/360*1024;const y=(90-lat)/180*512;
+    tctx.beginPath();tctx.arc(x,y,2,0,Math.PI*2);tctx.fill();
+  });
+
+  const tex=new THREE.CanvasTexture(tc);
+  const mat=new THREE.MeshStandardMaterial({map:tex,metalness:.1,roughness:.7});
+  const globe=new THREE.Mesh(geo,mat);scene.add(globe);
+
+  // Atmosphere glow
+  const ag=new THREE.SphereGeometry(1.6,64,64);
+  const am=new THREE.MeshBasicMaterial({color:0x915EFF,transparent:true,opacity:.06,side:THREE.BackSide});
+  scene.add(new THREE.Mesh(ag,am));
+  const ag2=new THREE.SphereGeometry(1.7,64,64);
+  const am2=new THREE.MeshBasicMaterial({color:0x00CFFF,transparent:true,opacity:.03,side:THREE.BackSide});
+  scene.add(new THREE.Mesh(ag2,am2));
+
+  // Floating markers — arc lines
+  function addArc(lat1,lon1,lat2,lon2){
+    const pts=[];
+    for(let t=0;t<=1;t+=.05){
+      const lat=lat1+(lat2-lat1)*t;
+      const lon=lon1+(lon2-lon1)*t;
+      const phi=(90-lat)*Math.PI/180;const theta=(lon+180)*Math.PI/180;
+      const r=1.52+Math.sin(t*Math.PI)*.25;
+      pts.push(new THREE.Vector3(
+        -r*Math.sin(phi)*Math.cos(theta),
+        r*Math.cos(phi),
+        r*Math.sin(phi)*Math.sin(theta)
+      ));
+    }
+    const g=new THREE.BufferGeometry().setFromPoints(pts);
+    const m=new THREE.LineBasicMaterial({color:0x00CFFF,transparent:true,opacity:.4});
+    scene.add(new THREE.Line(g,m));
+  }
+  addArc(28,77,37,122);addArc(28,77,51,0);addArc(28,77,40,-74);
+
+  const al=new THREE.AmbientLight(0xffffff,.4);scene.add(al);
+  const dl=new THREE.DirectionalLight(0x915EFF,1.5);dl.position.set(5,5,5);scene.add(dl);
+  const dl2=new THREE.DirectionalLight(0x00CFFF,.8);dl2.position.set(-5,3,3);scene.add(dl2);
+
+  (function anim(){
+    requestAnimationFrame(anim);
+    globe.rotation.y+=.004;
+    renderer.render(scene,camera);
+  })();
+})();
+
+/* ============================================================
+   NAV SCROLL
+============================================================ */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('stuck',scrollY>50));
+
+/* ============================================================
+   SCROLL REVEAL
+============================================================ */
+const io=new IntersectionObserver(e=>{
+  e.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');io.unobserve(en.target)}});
+},{threshold:.1});
+document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el=>io.observe(el));
+
+/* ============================================================
+   COUNTERS
+============================================================ */
+document.querySelectorAll('.a-stat-n[data-target]').forEach(el=>{
+  const io2=new IntersectionObserver(ens=>{
+    if(!ens[0].isIntersecting)return;
+    const tgt=+el.dataset.target,isGpa=!!el.dataset.gpa;
+    let v=0;const dur=1800,step=16,inc=tgt/(dur/step);
+    const iv=setInterval(()=>{v+=inc;if(v>=tgt){v=tgt;clearInterval(iv)}
+      el.textContent=isGpa?(v/100).toFixed(2):Math.floor(v);},step);
+    io2.disconnect();
+  },{threshold:.5});
+  io2.observe(el);
+});
+
+/* ============================================================
+   3D CARD TILT
+============================================================ */
+document.querySelectorAll('.proj-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const dx=(e.clientX-r.left-r.width/2)/r.width;
+    const dy=(e.clientY-r.top-r.height/2)/r.height;
+    card.style.transform=`perspective(900px) rotateY(${dx*8}deg) rotateX(${-dy*6}deg) translateY(-6px)`;
+    card.style.setProperty('--px',((e.clientX-r.left)/r.width*100)+'%');
+    card.style.setProperty('--py',((e.clientY-r.top)/r.height*100)+'%');
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transition='transform .6s cubic-bezier(.22,1,.36,1),border-color .4s,box-shadow .4s';
+    card.style.transform='perspective(900px) rotateY(0deg) rotateX(0deg) translateY(0)';
+  });
+  card.addEventListener('mouseenter',()=>{
+    card.style.transition='transform .15s ease-out,border-color .4s,box-shadow .4s';
+  });
+});
+
+/* ============================================================
+   MAGNETIC BUTTONS
+============================================================ */
+document.querySelectorAll('.btn-violet,.btn-outline-v,.soc,.soc-full').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.18}px)`;
+  });
+  btn.addEventListener('mouseleave',()=>{
+    btn.style.transition='transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,border-color .3s,color .3s,background .3s';
+    btn.style.transform='';
+  });
+  btn.addEventListener('mouseenter',()=>btn.style.transition='transform .12s ease');
+});
+</script>
+</body>
+</html>
