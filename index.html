@@ -84,7 +84,7 @@ section{position:relative;z-index:1;padding:6rem 3.5rem}
 #about{background:linear-gradient(135deg,rgba(145,94,255,.03),transparent)}
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
 .photo-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
-.photo-frame{position:relative;width:360px;height:430px;margin:0 auto;}
+.photo-frame{position:relative;width:420px;height:500px;margin:0 auto;}
 .photo-frame::before{content:'';position:absolute;inset:-3px;border-radius:28px;background:linear-gradient(135deg,var(--violet),var(--cyan) 50%,var(--pink));z-index:0;}
 .photo-frame::after{content:'';position:absolute;top:-18px;right:-18px;width:80px;height:80px;background-image:radial-gradient(circle,rgba(145,94,255,.55) 1.5px,transparent 1.5px);background-size:12px 12px;z-index:3;pointer-events:none;}
 .profile-photo{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center 15%;border-radius:26px;display:block;transform:scale(1.04);}
@@ -195,7 +195,7 @@ footer{position:relative;z-index:1;padding:1.6rem 3.5rem;border-top:1px solid va
   #hero{padding:5rem 2rem 4rem;gap:2rem;min-height:auto;flex-direction:column;align-items:flex-start;}
   .hero-right{display:none}.hero-left{padding-top:0;max-width:100%}
   .about-grid{grid-template-columns:1fr;gap:3rem}
-  .photo-frame{width:320px;height:380px}
+  .photo-frame{width:360px;height:430px}
   .contact-wrap{grid-template-columns:1fr;gap:3rem}
   #globe-canvas{width:300px!important;height:300px!important}
   section{padding:5rem 2rem}
@@ -215,7 +215,7 @@ footer{position:relative;z-index:1;padding:1.6rem 3.5rem;border-top:1px solid va
   .sec-sub{margin-bottom:2rem}
   /* photo */
   .photo-wrap{margin-bottom:1.5rem}
-  .photo-frame{width:230px;height:280px}
+  .photo-frame{width:270px;height:330px}
   .photo-frame::after{width:55px;height:55px;top:-10px;right:-10px;background-size:10px 10px;}
   .photo-dot-bl{width:50px;height:50px;bottom:-10px;left:-10px;background-size:10px 10px;}
   /* stats */
@@ -256,7 +256,7 @@ footer{position:relative;z-index:1;padding:1.6rem 3.5rem;border-top:1px solid va
 @media(max-width:380px){
   .cert-grid{grid-template-columns:1fr}
   .hero-name{font-size:2rem}
-  .photo-frame{width:200px;height:250px}
+  .photo-frame{width:230px;height:280px}
   .skills-grid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
@@ -321,7 +321,7 @@ footer{position:relative;z-index:1;padding:1.6rem 3.5rem;border-top:1px solid va
       <p class="ap">My internship at <strong>Briztech Infosystems</strong> sharpened my skills across ML deployment, REST API design, and OWASP security practices. I thrive where clean UX meets resilient backend engineering.</p>
       <p class="ap">Beyond code — NSS National Debate Winner (18 states), ACM Chapter Member, HackUEM 5.0 3rd Rank Holder. I believe the best engineers communicate as well as they build.</p>
       <div class="about-stats">
-        <div class="a-stat rv" style="transition-delay:.05s"><div class="a-stat-n" data-target="4">0</div><div class="a-stat-l">Major Projects</div></div>
+        <div class="a-stat rv" style="transition-delay:.05s"><div class="a-stat-n" data-target="5">0</div><div class="a-stat-l">Major Projects</div></div>
         <div class="a-stat rv" style="transition-delay:.1s"><div class="a-stat-n" data-target="829" data-gpa="1">0</div><div class="a-stat-l">BCA CGPA / 10</div></div>
         <div class="a-stat rv" style="transition-delay:.15s"><div class="a-stat-n" data-target="18">0</div><div class="a-stat-l">States Represented</div></div>
         <div class="a-stat rv" style="transition-delay:.2s"><div class="a-stat-n" data-target="11">0</div><div class="a-stat-l">Certifications</div></div>
@@ -432,6 +432,23 @@ footer{position:relative;z-index:1;padding:1.6rem 3.5rem;border-top:1px solid va
       <div class="proj-chips"><span class="chip">PHP</span><span class="chip">MySQL</span><span class="chip">Bootstrap</span><span class="chip">JavaScript</span></div>
       <div class="proj-links"><a href="https://github.com/anupmazumdar" target="_blank" class="proj-link">📂 GitHub</a></div>
     </div>
+
+    <div class="proj-card rv" style="transition-delay:.16s">
+      <div class="proj-top"><div class="proj-num">05</div><div class="proj-date-tag">2025 — Present</div></div>
+      <div class="proj-name">ClassVision</div>
+      <div class="proj-tag-sub">Face Recognition Attendance System</div>
+      <div class="proj-desc">Desktop app automating classroom attendance via <strong style="color:var(--violet2)">LBPH face recognition</strong>. Registers students via webcam (50 images/student), trains model on-device, marks attendance in real-time with sub-70% confidence threshold. Voice feedback via pyttsx3. Exports per-subject CSV reports with timestamps &amp; attendance % calculation.</div>
+      <div class="proj-chips">
+        <span class="chip">Python</span><span class="chip">OpenCV</span>
+        <span class="chip">Tkinter</span><span class="chip">PIL</span>
+        <span class="chip">Pandas</span><span class="chip">NumPy</span>
+        <span class="chip">LBPH</span><span class="chip">pyttsx3</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/anupmazumdar/ClassVision" target="_blank" class="proj-link">📂 GitHub</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
