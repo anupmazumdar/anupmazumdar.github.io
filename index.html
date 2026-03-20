@@ -84,10 +84,10 @@ section{position:relative;z-index:1;padding:6rem 3.5rem}
 #about{background:linear-gradient(135deg,rgba(145,94,255,.03),transparent)}
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
 .photo-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
-.photo-frame{position:relative;width:300px;height:360px;margin:0 auto;}
+.photo-frame{position:relative;width:360px;height:430px;margin:0 auto;}
 .photo-frame::before{content:'';position:absolute;inset:-3px;border-radius:28px;background:linear-gradient(135deg,var(--violet),var(--cyan) 50%,var(--pink));z-index:0;}
 .photo-frame::after{content:'';position:absolute;top:-18px;right:-18px;width:80px;height:80px;background-image:radial-gradient(circle,rgba(145,94,255,.55) 1.5px,transparent 1.5px);background-size:12px 12px;z-index:3;pointer-events:none;}
-.profile-photo{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:26px;display:block;}
+.profile-photo{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center 15%;border-radius:26px;display:block;transform:scale(1.04);}
 .photo-glow{position:absolute;inset:-30px;background:radial-gradient(circle at 50% 40%,rgba(145,94,255,.28),transparent 65%);z-index:-1;border-radius:50%;}
 .photo-dot-bl{position:absolute;bottom:-18px;left:-18px;width:70px;height:70px;background-image:radial-gradient(circle,rgba(0,207,255,.45) 1.5px,transparent 1.5px);background-size:11px 11px;z-index:3;pointer-events:none;}
 .photo-badge{position:absolute;bottom:-14px;right:20px;z-index:4;background:var(--card-bg);border:1.5px solid var(--border2);border-radius:50px;padding:.45rem 1rem;font-family:'Fira Code',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--violet2);white-space:nowrap;box-shadow:0 8px 30px rgba(145,94,255,.2);}
@@ -195,7 +195,7 @@ footer{position:relative;z-index:1;padding:1.6rem 3.5rem;border-top:1px solid va
   #hero{padding:5rem 2rem 4rem;gap:2rem;min-height:auto;flex-direction:column;align-items:flex-start;}
   .hero-right{display:none}.hero-left{padding-top:0;max-width:100%}
   .about-grid{grid-template-columns:1fr;gap:3rem}
-  .photo-frame{width:260px;height:310px}
+  .photo-frame{width:320px;height:380px}
   .contact-wrap{grid-template-columns:1fr;gap:3rem}
   #globe-canvas{width:300px!important;height:300px!important}
   section{padding:5rem 2rem}
@@ -215,7 +215,7 @@ footer{position:relative;z-index:1;padding:1.6rem 3.5rem;border-top:1px solid va
   .sec-sub{margin-bottom:2rem}
   /* photo */
   .photo-wrap{margin-bottom:1.5rem}
-  .photo-frame{width:200px;height:250px}
+  .photo-frame{width:230px;height:280px}
   .photo-frame::after{width:55px;height:55px;top:-10px;right:-10px;background-size:10px 10px;}
   .photo-dot-bl{width:50px;height:50px;bottom:-10px;left:-10px;background-size:10px 10px;}
   /* stats */
@@ -256,7 +256,7 @@ footer{position:relative;z-index:1;padding:1.6rem 3.5rem;border-top:1px solid va
 @media(max-width:380px){
   .cert-grid{grid-template-columns:1fr}
   .hero-name{font-size:2rem}
-  .photo-frame{width:175px;height:220px}
+  .photo-frame{width:200px;height:250px}
   .skills-grid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
